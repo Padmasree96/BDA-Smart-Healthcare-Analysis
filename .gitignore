@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environments
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Spark & Checkpoints
+checkpoint/
+checkpoints/
+metastore_db/
+derby.log
+.spark-staging/
+
+# IDE & OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+
+# Model artifacts & large streaming checkpoints
+data/processed/*.parquet
+data/processed/*.crc
+data/alerts/*.parquet
+data/alerts/*.crc
+data/models/*/
+!data/models/.gitkeep
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/alerts/.gitkeep
