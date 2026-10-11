@@ -7,60 +7,41 @@ cls
 echo =====================================================================
 echo          SMART HEALTHCARE BIG DATA PIPELINE CONTROLLER
 echo =====================================================================
-echo  [1] Start Kafka & Zookeeper (Docker Compose)
-echo  [2] Stop Kafka & Zookeeper Containers
-echo  [3] Run Patient Vitals Stream Generator (Kafka Producer)
-echo  [4] Run PySpark Real-Time Streaming & NEWS2 Alert Job
-echo  [5] Run Spark MLlib Readmission Risk Model Training
-echo  [6] Launch Streamlit Health Monitoring Dashboard
-echo  [7] Run End-to-End Test (Generator + Spark + Dashboard)
-echo  [8] Install Requirements
-echo  [9] Exit
+echo  [1] Install Dependencies (pip install -r requirements.txt)
+echo  [2] Start Patient Vitals Stream Generator
+echo  [3] Run PySpark Local Streaming & Analytics
+echo  [4] Launch Streamlit Health Monitoring Dashboard
+echo  [5] Run End-to-End Demo (Generator + Dashboard)
+echo  [6] Exit
 echo =====================================================================
-set /p opt="Select an option [1-9]: "
+set /p opt="Select an option [1-6]: "
 
-if "%opt%"=="1" goto START_DOCKER
-if "%opt%"=="2" goto STOP_DOCKER
-if "%opt%"=="3" goto RUN_GENERATOR
-if "%opt%"=="4" goto RUN_SPARK_STREAMING
-if "%opt%"=="5" goto RUN_SPARK_ML
-if "%opt%"=="6" goto RUN_DASHBOARD
-if "%opt%"=="7" goto RUN_ALL
-if "%opt%"=="8" goto INSTALL_REQ
-if "%opt%"=="9" goto END
+if "%opt%"=="1" goto INSTALL_REQ
+if "%opt%"=="2" goto RUN_GENERATOR
+if "%opt%"=="3" goto RUN_SPARK
+if "%opt%"=="4" goto RUN_DASHBOARD
+if "%opt%"=="5" goto RUN_ALL
+if "%opt%"=="6" goto END
 
 echo Invalid selection, please try again.
 pause
 goto MENU
 
-:START_DOCKER
-echo Starting Docker containers (Kafka, Zookeeper, Kafka UI)...
-docker compose up -d
-echo Kafka is running on localhost:9092. Kafka UI on http://localhost:8080
-pause
-goto MENU
-
-:STOP_DOCKER
-echo Stopping Docker containers...
-docker compose down
+:INSTALL_REQ
+echo Installing requirements...
+pip install -r requirements.txt
 pause
 goto MENU
 
 :RUN_GENERATOR
-echo Starting Kafka Patient Vitals Generator...
+echo Starting Local Patient Vitals Generator...
 python src\generator\stream_generator.py
 pause
 goto MENU
 
-:RUN_SPARK_STREAMING
-echo Starting PySpark Streaming & NEWS2 Alert Job...
+:RUN_SPARK
+echo Starting PySpark Local Analytics Job...
 python src\spark_jobs\batch_analytics.py
-pause
-goto MENU
-
-:RUN_SPARK_ML
-echo Training Spark MLlib Readmission Risk Prediction Model...
-python src\spark_jobs\ml_risk_prediction.py
 pause
 goto MENU
 
@@ -74,17 +55,8 @@ goto MENU
 echo Starting Generator in background...
 start cmd /k python src\generator\stream_generator.py
 timeout /t 3
-echo Starting Spark Streaming in background...
-start cmd /k python src\spark_jobs\batch_analytics.py
-timeout /t 3
 echo Launching Streamlit Dashboard...
 start cmd /k streamlit run src\dashboard\app.py
-goto MENU
-
-:INSTALL_REQ
-echo Installing requirements...
-pip install -r requirements.txt
-pause
 goto MENU
 
 :END
